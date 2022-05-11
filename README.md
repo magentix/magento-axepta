@@ -29,7 +29,3 @@ Go to **System > Configuration > Payment Methods > Axepta**
 - **Blowfish Crypt Key**: Your Blowfish encryption key
 - **Allowed for emails only**: Enabled the method only for quote with specific customer emails (comma separated). Leave blank for no restriction.
 - **Payment from Applicable Countries**: Allowed countries (all or specific countries)
-
-## Contact
-
-support@magentix.fr
