@@ -99,19 +99,4 @@ class Magentix_Axepta_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $helper->uniqHash(uniqid());
     }
-
-    /**
-     * Retrieve background URL
-     *
-     * @return string
-     */
-    public function getBackgroundUrl(): string
-    {
-        $media = Mage::getBaseDir('media') . DS . 'axepta' . DS . 'background.jpg';
-        if (is_file($media)) {
-            return Mage::getBaseURL('media') . 'axepta/background.jpg';
-        }
-
-        return '';
-    }
 }

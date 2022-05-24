@@ -74,9 +74,6 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
         $axeptaPayment->setLanguage($language);
         $axeptaPayment->setOrderDesc($storeName);
         $axeptaPayment->setResponseParam();
-        if ($background = $this->getPaymentHelper()->getBackgroundUrl()) {
-            $axeptaPayment->setParam('Background', $background);
-        }
 
         $axeptaPayment->validate();
         $axeptaPayment->getShaSign();
