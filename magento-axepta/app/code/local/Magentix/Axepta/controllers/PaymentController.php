@@ -107,7 +107,17 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
                 false
             ),
             'CustomField2' => $storeName,
+            'CustomField4' => $this->customFieldCart($order->getAllVisibleItems()),
         ];
+        if ($logo = $this->getPaymentHelper()->getLogoUrl()) {
+            $params['CustomField3'] = $logo;
+        }
+        if ($shippingAddress = $order->getShippingAddress()) {
+            $params['CustomField6'] = $this->customFieldAddress($shippingAddress);
+        }
+        if ($billingAddress = $order->getBillingAddress()) {
+            $params['CustomField7'] = $this->customFieldAddress($billingAddress);
+        }
 
         $paymentUrl = $axeptaPayment->getUrl() . '?' . http_build_query($params);
 
@@ -441,5 +451,46 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
         $checkout = Mage::getSingleton('checkout/session');
 
         return $checkout;
+    }
+
+    /**
+     * Build custom field address
+     *
+     * @param Mage_Customer_Model_Address_Abstract $address
+     *
+     * @return string
+     */
+    protected function customFieldAddress(Mage_Customer_Model_Address_Abstract $address): string
+    {
+        $fields = [
+            $address->getCompany(),
+            $address->getFirstname() . ' ' . $address->getLastname(),
+            $address->getStreet1(),
+            $address->getStreet2(),
+            $address->getPostcode() . ' ' . $address->getCity()
+        ];
+        $fields = array_filter($fields);
+        foreach ($fields as $key => $field) {
+            $fields[$key] = str_replace('|', '-', $field);
+        }
+
+        return join('|', $fields);
+    }
+
+    /**
+     * Build custom field cart
+     *
+     * @param Mage_Sales_Model_Order_Item[] $items
+     *
+     * @return string
+     */
+    protected function customFieldCart(array $items): string
+    {
+        $fields = [];
+        foreach ($items as $item) {
+            $fields[] = 'x' . (int)$item->getQtyOrdered() . ' - ' . str_replace('|', '-', $item->getName());
+        }
+
+        return join('|', $fields);
     }
 }
