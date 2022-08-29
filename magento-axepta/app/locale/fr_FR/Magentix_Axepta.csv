@@ -1,6 +1,7 @@
 "You will be redirected to the payment server after completing your order.","Vous serez redirigé vers le serveur de paiement après la finalisation de votre commande."
 "Ordering amount of %s is pending approval on gateway.","La capture d'un montant de %s est en attente d'approbation sur la passerelle."
 "Payment approved by the gateway. PayID: %s","Paiement approuvé par la passerelle. PayID : %s."
+"Your payment has failed. Please try again or choose another payment method.","Le paiement a échoué. Merci de renouveler l'opération ou de choisir une autre méthode de paiement."
 "Your payment has failed: %s. Please try again or choose another payment method.","Le paiement a échoué : %s. Merci de renouveler l'opération ou de choisir une autre méthode de paiement."
 "Your payment has been canceled. Please try again or choose another payment method.","Le paiement a été annulé. Merci de renouveler l'opération ou de choisir une autre méthode de paiement."
 "The payment was canceled by customer","Le paiement a été annulé par le client"

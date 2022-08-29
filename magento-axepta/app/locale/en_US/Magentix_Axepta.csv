@@ -1,6 +1,7 @@
 "You will be redirected to the payment server after completing your order.","You will be redirected to the payment server after completing your order."
 "Ordering amount of %s is pending approval on gateway.","Ordering amount of %s is pending approval on gateway."
 "Payment approved by the gateway. PayID: %s","Payment approved by the gateway. PayID: %s"
+"Your payment has failed. Please try again or choose another payment method.","Your payment has failed. Please try again or choose another payment method."
 "Your payment has failed: %s. Please try again or choose another payment method.","Your payment has failed: %s. Please try again or choose another payment method."
 "Your payment has been canceled. Please try again or choose another payment method.","Your payment has been canceled. Please try again or choose another payment method."
 "The payment was canceled by customer","The payment was canceled by customer"

@@ -61,6 +61,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </crypt_key>
+                        <order_desc translate="label">
+                            <label>Order Desc</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Store name if empty. Set "Test:0000" for test in production.</comment>
+                            <sort_order>62</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_desc>
                         <allowed_emails translate="label">
                             <label>Allowed for emails only</label>
                             <frontend_type>text</frontend_type>

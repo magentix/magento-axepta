@@ -100,6 +100,12 @@ class Magentix_Axepta_Model_Axepta
         'CustomField12',
         'CustomField13',
         'CustomField14',
+        'MsgVer',
+        'billingAddress',
+        'shippingAddress',
+        'billToCustomer',
+        'shipToCustomer',
+        'Card',
     ];
 
     protected $QHMACFields = ['PayID', 'TransID', 'MerchantID', 'Amount', 'Currency'];
@@ -150,6 +156,12 @@ class Magentix_Axepta_Model_Axepta
         'Type',
         'Plain',
         'Custom',
+        'MsgVer',
+        'billingAddress',
+        'shippingAddress',
+        'billToCustomer',
+        'shipToCustomer',
+        'Card',
     ];
 
     protected $requiredFields = ['MerchantID', 'TransID', 'Amount', 'Currency', 'OrderDesc'];
@@ -196,6 +208,76 @@ class Magentix_Axepta_Model_Axepta
     public function setResponseParam(string $encrypt = 'encrypt')
     {
         $this->setParam('Response', $encrypt);
+    }
+
+    /**
+     * Add bill to customer info
+     *
+     * @param array $billToCustomer
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function setBillToCustomer(array $billToCustomer)
+    {
+        $this->setParam('billToCustomer', []);
+    }
+
+    /**
+     * Add ship to customer info
+     *
+     * @param array $shipToCustomer
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function setShipToCustomer(array $shipToCustomer)
+    {
+        $this->setParam('shipToCustomer', []);
+    }
+
+    /**
+     * Add billing address
+     *
+     * @param array $billingAddress
+     * @throws Exception
+     */
+    public function setBillingAddress(array $billingAddress)
+    {
+        $this->setParam('billingAddress', []);
+    }
+
+    /**
+     * Add shipping address
+     *
+     * @param array $shippingAddress
+     * @throws Exception
+     */
+    public function setShippingAddress(array $shippingAddress)
+    {
+        $this->setParam('shippingAddress', []);
+    }
+
+    /**
+     * Set Msg Ver (default 3DSV2)
+     *
+     * @param string $version
+     * @throws Exception
+     */
+    public function setMsgVer(string $version = '2.0')
+    {
+        $this->setParam('MsgVer', $version);
+    }
+
+    /**
+     * Set card data
+     *
+     * @param string[] $card
+     * @throws Exception
+     */
+    public function setCard(array $card = [])
+    {
+        $this->setParam('Card', $card);
     }
 
     /**
@@ -713,5 +795,15 @@ class Magentix_Axepta_Model_Axepta
     public function getParams(): array
     {
         return $this->parameters;
+    }
+
+    /**
+     * Retrieve request to debug
+     *
+     * @return string
+     */
+    public function getDebug(): string
+    {
+        return $this->parameters['Debug'] ?? '';
     }
 }

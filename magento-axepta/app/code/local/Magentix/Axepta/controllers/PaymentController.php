@@ -57,6 +57,7 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
         $storeName = Mage::getStoreConfig('general/store_information/name', $order->getStore());
         $language  = substr(Mage::getStoreConfig('general/locale/code', $order->getStore()), 0, 2);
 
+        $paymentHelper = $this->getPaymentHelper();
         $axeptaPayment = $this->getAxeptaPayment();
 
         $axeptaPayment->setSecretKey($this->getPaymentHelper()->getHMAC());
@@ -72,7 +73,17 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
         $axeptaPayment->setURLNotify(Mage::getUrl('axepta/payment/webhook'));
         $axeptaPayment->setURLBack(Mage::getUrl('axepta/payment/cancel', ['o' => $transactionId]));
         $axeptaPayment->setLanguage($language);
-        $axeptaPayment->setOrderDesc($storeName);
+        $axeptaPayment->setOrderDesc($paymentHelper->getOrderDesc() ?: $storeName);
+        $axeptaPayment->setMsgVer();
+        $axeptaPayment->setCard();
+        if ($order->getBillingAddress()) {
+            $axeptaPayment->setBillingAddress($paymentHelper->buildAddress($order->getBillingAddress()));
+            $axeptaPayment->setBillToCustomer($paymentHelper->buildCustomerInfo($order->getBillingAddress(), $order));
+        }
+        if ($order->getShippingAddress()) {
+            $axeptaPayment->setShippingAddress($paymentHelper->buildAddress($order->getBillingAddress()));
+            $axeptaPayment->setShipToCustomer($paymentHelper->buildCustomerInfo($order->getBillingAddress(), $order));
+        }
         $axeptaPayment->setResponseParam();
 
         $axeptaPayment->validate();
@@ -124,7 +135,7 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
         $order->setState(
             Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
             true,
-            $this->__('Customer was redirect to payment gateway')
+            $this->__('Customer was redirect to payment gateway. Request: %s', $axeptaPayment->getDebug())
         );
         $order->save();
 
@@ -203,7 +214,7 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
      */
     public function successAction()
     {
-        $order = $this->getRequestedOrder();
+        $order = $this->getRequestedOrder('post');
         if (!$order) {
             $this->_redirect('/');
             return;
@@ -236,12 +247,7 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
      */
     public function failureAction()
     {
-        $order = $this->getRequestedOrder();
-        if (!$order) {
-            $this->_redirect('/');
-            return;
-        }
-
+        $order = $this->getRequestedOrder('post');
         $axeptaPayment = $this->getAxeptaPayment();
 
         try {
@@ -252,24 +258,29 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
                 )
             );
 
-            if ($order->canCancel()) {
-                $order->setState(
-                    Mage_Sales_Model_Order::STATE_CANCELED,
-                    true,
-                    $this->__(
-                        'The payment has failed. PayID: %s. Error: %s',
-                        $axeptaPayment->getParam('PayID'),
-                        substr($axeptaPayment->getParam('Code'), -4) . ' - ' . $axeptaPayment->getParam('Description')
-                    )
-                );
-                $order->save();
+            if ($order) {
+                if ($order->canCancel()) {
+                    $order->setState(
+                        Mage_Sales_Model_Order::STATE_CANCELED,
+                        true,
+                        $this->__(
+                            'The payment has failed. PayID: %s. Error: %s',
+                            $axeptaPayment->getParam('PayID'),
+                            substr($axeptaPayment->getParam('Code'), -4) . ' - ' . $axeptaPayment->getParam('Description')
+                        )
+                    );
+                    $order->save();
+                }
+
+                if ($order->getQuoteId()) {
+                    $this->openQuote((int)$order->getQuoteId());
+                }
             }
         } catch (Exception $exception) {
+            Mage::getSingleton('core/session')->addError(
+                $this->__('Your payment has failed. Please try again or choose another payment method.')
+            );
             Mage::log($exception->getMessage(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
-        }
-
-        if ($order->getQuoteId()) {
-            $this->openQuote((int)$order->getQuoteId());
         }
 
         $this->_redirect('checkout/cart');

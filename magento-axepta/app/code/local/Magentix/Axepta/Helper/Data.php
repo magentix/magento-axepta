@@ -49,6 +49,16 @@ class Magentix_Axepta_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Retrieve Order Desc
+     *
+     * @return string|null
+     */
+    public function getOrderDesc(): ?string
+    {
+        return Mage::getStoreConfig('payment/axepta/order_desc');
+    }
+
+    /**
      * Customer is allowed
      *
      * @param mixed email
@@ -113,5 +123,65 @@ class Magentix_Axepta_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         return '';
+    }
+
+    /**
+     * Build customer info
+     *
+     * @param Mage_Customer_Model_Address_Abstract $address
+     * @param Mage_Sales_Model_Order               $order
+     *
+     * @return array
+     */
+    public function buildCustomerInfo(
+        Mage_Customer_Model_Address_Abstract $address,
+        Mage_Sales_Model_Order $order
+    ): array {
+        $data = [
+            'consumer' => [
+                'salutation' => $address->getPrefix(),
+                'firstName'  => $address->getFirstname(),
+                'lastName'   => $address->getLastname(),
+            ],
+            'email' => $order->getCustomerEmail(),
+        ];
+
+        if ($address->getCompany()) {
+            $data['business'] = [
+                'legalName' => $address->getCompany(),
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Build address
+     *
+     * @param Mage_Customer_Model_Address_Abstract $address
+     *
+     * @return array
+     */
+    public function buildAddress(Mage_Customer_Model_Address_Abstract $address): array
+    {
+        $data = [
+            'city' => $address->getCity(),
+            'country' => [
+                'countryA2' => $address->getCountryModel()->getIso2Code(),
+                'countryA3' => $address->getCountryModel()->getIso3Code(),
+            ],
+            'addressLine1' => [
+                'street' => $address->getStreet1(),
+            ],
+            'postalCode' => $address->getPostcode(),
+        ];
+
+        if ($address->getStreet2()) {
+            $data['addressLine2'] = [
+                'street' => $address->getStreet2(),
+            ];
+        }
+
+        return $data;
     }
 }
