@@ -5,7 +5,7 @@
 "Your payment has failed: %s. Please try again or choose another payment method.","Le paiement a échoué : %s. Merci de renouveler l'opération ou de choisir une autre méthode de paiement."
 "Your payment has been canceled. Please try again or choose another payment method.","Le paiement a été annulé. Merci de renouveler l'opération ou de choisir une autre méthode de paiement."
 "The payment was canceled by customer","Le paiement a été annulé par le client"
-"Customer was redirect to payment gateway","Le client a été redirigé vers la passerelle de paiement"
+"Customer was redirect to payment gateway. Request: %s","Le client a été redirigé vers la passerelle de paiement. Requête : %s"
 "The payment has failed. PayID: %s. Error: %s","Le paiement a échoué. PayID : %s. Erreur : %s"
 "Customer returned from payment gateway","Le client est revenu de la passerrelle de paiement"
 "The payment has been denied. PayID: %s. Error: %s","Le paiement a été refusé. PayID : %s. Erreur : %s"
