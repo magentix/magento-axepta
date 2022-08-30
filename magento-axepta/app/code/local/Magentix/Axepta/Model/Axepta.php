@@ -218,9 +218,9 @@ class Magentix_Axepta_Model_Axepta
      * @return void
      * @throws Exception
      */
-    public function setBillToCustomer(array $billToCustomer)
+    public function setBillToCustomer(array $billToCustomer = [])
     {
-        $this->setParam('billToCustomer', []);
+        $this->setParam('billToCustomer', $billToCustomer);
     }
 
     /**
@@ -231,9 +231,9 @@ class Magentix_Axepta_Model_Axepta
      * @return void
      * @throws Exception
      */
-    public function setShipToCustomer(array $shipToCustomer)
+    public function setShipToCustomer(array $shipToCustomer = [])
     {
-        $this->setParam('shipToCustomer', []);
+        $this->setParam('shipToCustomer', $shipToCustomer);
     }
 
     /**
@@ -242,9 +242,9 @@ class Magentix_Axepta_Model_Axepta
      * @param array $billingAddress
      * @throws Exception
      */
-    public function setBillingAddress(array $billingAddress)
+    public function setBillingAddress(array $billingAddress = [])
     {
-        $this->setParam('billingAddress', []);
+        $this->setParam('billingAddress', $billingAddress);
     }
 
     /**
@@ -253,9 +253,9 @@ class Magentix_Axepta_Model_Axepta
      * @param array $shippingAddress
      * @throws Exception
      */
-    public function setShippingAddress(array $shippingAddress)
+    public function setShippingAddress(array $shippingAddress = [])
     {
-        $this->setParam('shippingAddress', []);
+        $this->setParam('shippingAddress', $shippingAddress);
     }
 
     /**
