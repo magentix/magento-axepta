@@ -11,3 +11,4 @@
 "The payment has been denied. PayID: %s. Error: %s","Le paiement a été refusé. PayID : %s. Erreur : %s"
 "Allowed for emails only","Autoriser uniquement pour les emails"
 "Comma Separated. Leave blank for no restriction.","Séparés par des virgules. Laissez vide pour aucune restriction."
+"Store name if empty. Set "Test:0000" for test in production.","Nom de la boutique si vide. Indiquer "Test:0000" pour une simulation en production."

@@ -11,3 +11,4 @@
 "The payment has been denied. PayID: %s. Error: %s","The payment has been denied. PayID: %s. Error: %s"
 "Allowed for emails only","Allowed for emails only"
 "Comma Separated. Leave blank for no restriction.","Comma Separated. Leave blank for no restriction."
+"Store name if empty. Set "Test:0000" for test in production.","Store name if empty. Set "Test:0000" for test in production."
