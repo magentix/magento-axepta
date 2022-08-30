@@ -6,9 +6,11 @@ The customer is redirected to Axepta payment gateway to make the Payment.
 
 **Note:** Doesn't work with **Strict** value for frontend cookie **SameSite** attribute. The customer will be disconnected when returning to the merchant website. Use **Lax** or **None** only.
 
+**From October 15, 2022, 3DSV2 is required. Please upgrade to 1.1.0 or higher.**
+
 ## Requirements
 
-- Magento 1.9.X
+- Magento 1.9.X / OpenMage LTS
 - PHP >= 7.2
 
 ## Installation
