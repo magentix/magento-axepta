@@ -27,5 +27,6 @@ Go to **System > Configuration > Payment Methods > Axepta**
 - **Merchant ID**: Your merchant Identifier (MID)
 - **HMAC Key**: Your HMAC Key
 - **Blowfish Crypt Key**: Your Blowfish encryption key
+- **Order Desc**: Custom order description. Set "Test:0000" for a simulation in production.
 - **Allowed for emails only**: Enabled the method only for quote with specific customer emails (comma separated). Leave blank for no restriction.
 - **Payment from Applicable Countries**: Allowed countries (all or specific countries)
