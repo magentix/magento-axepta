@@ -75,15 +75,6 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
         $axeptaPayment->setLanguage($language);
         $axeptaPayment->setOrderDesc($paymentHelper->getOrderDesc() ?: $storeName);
         $axeptaPayment->setMsgVer();
-        $axeptaPayment->setCard();
-        if ($order->getBillingAddress()) {
-            $axeptaPayment->setBillingAddress($paymentHelper->buildAddress($order->getBillingAddress()));
-            $axeptaPayment->setBillToCustomer($paymentHelper->buildCustomerInfo($order->getBillingAddress(), $order));
-        }
-        if ($order->getShippingAddress()) {
-            $axeptaPayment->setShippingAddress($paymentHelper->buildAddress($order->getBillingAddress()));
-            $axeptaPayment->setShipToCustomer($paymentHelper->buildCustomerInfo($order->getBillingAddress(), $order));
-        }
         $axeptaPayment->setResponseParam();
 
         $axeptaPayment->validate();
@@ -154,7 +145,7 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
     public function webhookAction()
     {
         try {
-            $order = $this->getRequestedOrder('post');
+            $order = $this->getRequestedOrder();
             if (!$order) {
                 throw new Exception('Order not found');
             }
@@ -214,7 +205,7 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
      */
     public function successAction()
     {
-        $order = $this->getRequestedOrder('post');
+        $order = $this->getRequestedOrder();
         if (!$order) {
             $this->_redirect('/');
             return;
@@ -247,7 +238,7 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
      */
     public function failureAction()
     {
-        $order = $this->getRequestedOrder('post');
+        $order = $this->getRequestedOrder();
         $axeptaPayment = $this->getAxeptaPayment();
 
         try {
@@ -334,21 +325,16 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
     /**
      * Validate Order
      *
-     * @param string $method
-     *
      * @return Mage_Sales_Model_Order|false
      */
-    protected function getRequestedOrder(string $method = 'get')
+    protected function getRequestedOrder()
     {
         try {
             $axeptaPayment = $this->getAxeptaPayment();
 
             $axeptaPayment->setSecretKey($this->getPaymentHelper()->getHMAC());
             $axeptaPayment->setCryptKey($this->getPaymentHelper()->getCryptKey());
-            $request = $_GET;
-            if ($method === 'post') {
-                $request = $_POST;
-            }
+            $request = empty($_POST) ? $_GET : $_POST;
             $axeptaPayment->setResponse($request);
 
             if (!$axeptaPayment->isValid()) {
