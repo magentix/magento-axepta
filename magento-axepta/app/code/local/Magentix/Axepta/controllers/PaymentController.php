@@ -195,7 +195,7 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
             }
         } catch (Exception $exception) {
             Mage::log($exception->getMessage(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
-            Mage::log($this->getRequest(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
+            Mage::log($this->getGatewayRequest(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
         }
     }
 
@@ -273,7 +273,7 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
                 $this->__('Your payment has failed. Please try again or choose another payment method.')
             );
             Mage::log($exception->getMessage(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
-            Mage::log($this->getRequest(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
+            Mage::log($this->getGatewayRequest(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
         }
 
         $this->_redirect('checkout/cart');
@@ -336,7 +336,7 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
 
             $axeptaPayment->setSecretKey($this->getPaymentHelper()->getHMAC());
             $axeptaPayment->setCryptKey($this->getPaymentHelper()->getCryptKey());
-            $axeptaPayment->setResponse($this->getRequest());
+            $axeptaPayment->setResponse($this->getGatewayRequest());
 
             if (!$axeptaPayment->isValid()) {
                 return false;
@@ -362,7 +362,7 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
      *
      * @return array
      */
-    protected function getRequest(): array
+    protected function getGatewayRequest(): array
     {
         return empty($_POST) ? $_GET : $_POST;
     }
