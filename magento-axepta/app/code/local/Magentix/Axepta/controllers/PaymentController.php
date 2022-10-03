@@ -195,7 +195,6 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
             }
         } catch (Exception $exception) {
             Mage::log($exception->getMessage(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
-            Mage::log($this->getGatewayRequest(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
         }
     }
 
@@ -273,7 +272,6 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
                 $this->__('Your payment has failed. Please try again or choose another payment method.')
             );
             Mage::log($exception->getMessage(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
-            Mage::log($this->getGatewayRequest(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
         }
 
         $this->_redirect('checkout/cart');
@@ -331,9 +329,9 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
      */
     protected function getRequestedOrder()
     {
-        try {
-            $axeptaPayment = $this->getAxeptaPayment();
+        $axeptaPayment = $this->getAxeptaPayment();
 
+        try {
             $axeptaPayment->setSecretKey($this->getPaymentHelper()->getHMAC());
             $axeptaPayment->setCryptKey($this->getPaymentHelper()->getCryptKey());
             $axeptaPayment->setResponse($this->getGatewayRequest());
@@ -351,7 +349,15 @@ class Magentix_Axepta_PaymentController extends Mage_Core_Controller_Front_Actio
 
             return $order;
         } catch (Exception $exception) {
-            Mage::log($exception->getMessage(), Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
+            $logs = [
+                'Magentix_Axepta_PaymentController::getRequestedOrder',
+                $exception->getMessage(),
+                $this->getGatewayRequest(),
+                $axeptaPayment->getParams()
+            ];
+            foreach ($logs as $message) {
+                Mage::log($message, Zend_Log::ERR, Magentix_Axepta_Helper_Data::AXEPTA_LOG_FILE);
+            }
         }
 
         return false;
